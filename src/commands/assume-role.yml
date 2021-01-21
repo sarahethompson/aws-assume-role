@@ -1,7 +1,5 @@
 description: >
   Installs AWS CLI, setup the IAM user keys and assume specified role.
-# What will this command do?
-# Descriptions should be short, simple, and clear.
 parameters:
   access_key_id:
     description: AWS Access Key ID Variable Name
