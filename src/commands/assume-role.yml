@@ -15,7 +15,7 @@ parameters:
     default: default
   role_arn:
     description: Role arn to assume
-    type: string
+    type: env_var_name
 steps:
   - aws-cli/install
   - run: |
