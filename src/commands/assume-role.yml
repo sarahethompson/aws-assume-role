@@ -13,11 +13,8 @@ parameters:
     description: AWS Profile Name
     type: string
     default: default
-  account:
-    description: AWS account in which the assumed role is
-    type: string
-  role:
-    description: Role name
+  role_arn:
+    description: Role arn to assume
     type: string
 steps:
   - aws-cli/install
@@ -25,7 +22,7 @@ steps:
       aws configure set aws_access_key_id $<< parameters.access_key_id >> --profile << parameters.profile_name >> && \
       aws configure set aws_secret_access_key $<< parameters.secret_access_key >> --profile << parameters.profile_name >>
   - run: |
-      temp_role=$(aws sts assume-role --role-arn "arn:aws:iam::<< parameters.account >>:role/<< parameters.role >>" --role-session-name "RoleSession1" --profile << parameters.profile_name >>) && \
+      temp_role=$(aws sts assume-role --role-arn << parameters.role_arn >> --role-session-name $CIRCLE_BUILD_NUM --profile << parameters.profile_name >>) && \
       aws configure set aws_access_key_id $(echo $temp_role | jq .Credentials.AccessKeyId | xargs) --profile << parameters.profile_name >> && \
       aws configure set aws_secret_access_key $(echo $temp_role | jq .Credentials.SecretAccessKey | xargs) --profile << parameters.profile_name >> && \
       aws configure set aws_session_token $(echo $temp_role | jq .Credentials.SessionToken | xargs) --profile << parameters.profile_name >>
